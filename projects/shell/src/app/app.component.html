@@ -1,0 +1,34 @@
+<!-- Master Layout -->
+<div class="master-layout">
+  <!-- Header MFE (Persistent across all pages) -->
+  <header class="header-section">
+    <div #headerContainer></div>
+  </header>
+
+  <!-- Main Content Area (Changes based on route) -->
+  <main class="content-section">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Debug Panel -->
+  <div class="debug-panel">
+    <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#debugCollapse">
+      <i class="bi bi-bug"></i> Debug
+    </button>
+    <div class="collapse" id="debugCollapse">
+      <div class="card card-body mt-2 bg-dark text-light">
+        <h6>MFE Monitor</h6>
+        <small class="text-muted">Open console for messages</small>
+        <div class="mt-2">
+          <p class="mb-1 small"><strong>Active MFEs:</strong></p>
+          <ul class="list-unstyled small">
+            <li>🏠 Shell - :4200</li>
+            <li>📋 Header - :4201</li>
+            <li>📦 Products - :4202</li>
+            <li>🛒 Cart - :4203</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
