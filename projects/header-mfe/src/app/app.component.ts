@@ -28,6 +28,17 @@ export class AppComponent implements OnInit {
     });
   }
 
+  navigate(path: string): void {
+    console.log('[Header MFE] Navigating to:', path);
+    // Send navigation message to Shell
+    this.commService.sendMessage({
+      from: 'Header',
+      to: 'Shell',
+      type: 'navigate',
+      content: { path }
+    }, true);
+  }
+
   ngOnInit(): void {
     // Load cart count from localStorage on init
     this.loadCartCountFromStorage();

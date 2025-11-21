@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef, AfterViewInit, Injector, createComponent, EnvironmentInjector, effect } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 import { InterAppCommunicationService } from 'shared-lib';
@@ -20,7 +20,8 @@ export class AppComponent implements AfterViewInit {
   constructor(
     private injector: EnvironmentInjector,
     private commService: InterAppCommunicationService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {
     // Listen for add-to-cart messages from Products MFE
     effect(() => {
@@ -56,6 +57,16 @@ export class AppComponent implements AfterViewInit {
         
         this.commService.clearMessage();
         this.publishCartUpdate();
+      }
+    });
+
+    // Listen for navigation messages from Header MFE
+    effect(() => {
+      const message = this.commService.getMessage('Header', 'navigate')();
+      if (message) {
+        console.log('[Shell] Received navigation request:', message.content.path);
+        this.router.navigate([message.content.path]);
+        this.commService.clearMessage();
       }
     });
   }

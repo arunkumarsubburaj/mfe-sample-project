@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/" style="cursor: pointer;">
+    <a class="navbar-brand" (click)="navigate('/')" style="cursor: pointer;">
       <i class="bi bi-shop" style="margin-right: 16px;"></i>{{ title }}
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -9,12 +9,12 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" style="margin-right: 16px;">
-          <a class="nav-link" href="/products" style="cursor: pointer;">
+          <a class="nav-link" (click)="navigate('/products')" style="cursor: pointer;">
             <i class="bi bi-grid"></i> Products
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link position-relative" href="/cart" style="cursor: pointer;">
+          <a class="nav-link position-relative" (click)="navigate('/cart')" style="cursor: pointer;">
             <i class="bi bi-cart3"></i> Cart
             @if (cartCount() > 0) {
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
