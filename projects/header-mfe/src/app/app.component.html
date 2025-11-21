@@ -17,7 +17,7 @@
           <a class="nav-link position-relative" (click)="navigate('/cart')" style="cursor: pointer;">
             <i class="bi bi-cart3"></i> Cart
             @if (cartCount() > 0) {
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
                 {{ cartCount() }}
               </span>
             }

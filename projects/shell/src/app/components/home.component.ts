@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
               Welcome to E-Commerce MFE Demo
             </h1>
             <p class="lead text-muted">
-              A demonstration of Microfrontend Architecture using Module Federation
+              A demonstration of Microfrontend Architecture using Webpack Module Federation
             </p>
           </div>
 
@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
               </h3>
               <div class="row g-3">
                 <div class="col-md-6">
-                  <div class="p-3 border rounded">
+                  <div class="p-3 border rounded h-100">
                     <h5 class="mfe-shell-text">
                       <i class="bi bi-hdd-network"></i> 🏠 Shell Application
                     </h5>
@@ -36,29 +36,29 @@ import { CommonModule } from '@angular/common';
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="p-3 border rounded">
+                  <div class="p-3 border rounded h-100">
                     <h5 class="mfe-header-text">
                       <i class="bi bi-layout-text-window"></i> 📋 Header MFE
                     </h5>
-                    <p class="small mb-0">Navigation bar with cart badge (Module Federation)</p>
+                    <p class="small mb-0">Navigation bar with cart badge (Webpack Module Federation)</p>
                     <span class="badge mfe-header">Port 4201</span>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="p-3 border rounded">
+                  <div class="p-3 border rounded h-100">
                     <h5 class="mfe-products-text">
                       <i class="bi bi-grid"></i> 📦 Products MFE
                     </h5>
-                    <p class="small mb-0">Product catalog with add-to-cart (Module Federation)</p>
+                    <p class="small mb-0">Product catalog with add-to-cart (Webpack Module Federation)</p>
                     <span class="badge mfe-products">Port 4202</span>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="p-3 border rounded">
+                  <div class="p-3 border rounded h-100">
                     <h5 class="mfe-cart-text">
                       <i class="bi bi-cart3"></i> 🛒 Cart MFE
                     </h5>
-                    <p class="small mb-0">Shopping cart management (Module Federation)</p>
+                    <p class="small mb-0">Shopping cart management (Webpack Module Federation)</p>
                     <span class="badge mfe-cart">Port 4203</span>
                   </div>
                 </div>
@@ -69,24 +69,62 @@ import { CommonModule } from '@angular/common';
           <div class="card shadow-sm mb-4">
             <div class="card-body">
               <h3 class="card-title mb-3">
+                <i class="bi bi-puzzle text-primary"></i>
+                Module Federation Setup
+              </h3>
+              <p class="mb-3">
+                All microfrontends use <strong>Webpack Module Federation</strong> via <code>&#64;angular-architects/module-federation</code>:
+              </p>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <i class="bi bi-check-circle text-success"></i>
+                  Header: Dynamically loaded via <code>loadRemoteModule</code>
+                </li>
+                <li class="mb-2">
+                  <i class="bi bi-check-circle text-success"></i>
+                  Products: Lazy loaded via Angular Router
+                </li>
+                <li class="mb-2">
+                  <i class="bi bi-check-circle text-success"></i>
+                  Cart: Lazy loaded via Angular Router
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="card-title mb-3">
                 <i class="bi bi-chat-dots text-primary"></i>
                 Inter-MFE Communication
               </h3>
               <p class="mb-3">
-                All microfrontends communicate using <strong>NgRx Signal Store</strong>:
+                All microfrontends communicate using <strong>NgRx Signal Store</strong> with <strong>localStorage persistence</strong>:
               </p>
               <ul class="list-unstyled">
                 <li class="mb-2">
                   <i class="bi bi-arrow-right-circle text-primary"></i>
-                  Products MFE → Cart MFE: Send product to cart
+                  Products MFE → Shell: Send product to cart
                 </li>
                 <li class="mb-2">
                   <i class="bi bi-arrow-right-circle text-primary"></i>
-                  Cart MFE → Header MFE: Update cart count badge
+                  Shell → Header MFE: Update cart count badge
+                </li>
+                <li class="mb-2">
+                  <i class="bi bi-arrow-right-circle text-primary"></i>
+                  Cart MFE → Shell: Cart operations (update, remove, clear)
+                </li>
+                <li class="mb-2">
+                  <i class="bi bi-arrow-right-circle text-primary"></i>
+                  Header MFE → Shell: Navigation requests
                 </li>
                 <li class="mb-2">
                   <i class="bi bi-check-circle text-success"></i>
                   Real-time updates across all microfrontends
+                </li>
+                <li class="mb-2">
+                  <i class="bi bi-database text-info"></i>
+                  Cart state persisted in localStorage
                 </li>
               </ul>
             </div>
@@ -127,6 +165,12 @@ import { CommonModule } from '@angular/common';
     .badge.mfe-cart {
       background: #fd7e14 !important;
       color: white !important;
+    }
+    code {
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
     }
   `]
 })
