@@ -28,38 +28,38 @@ import { CommonModule } from '@angular/common';
               <div class="row g-3">
                 <div class="col-md-6">
                   <div class="p-3 border rounded">
-                    <h5 class="text-primary">
-                      <i class="bi bi-hdd-network"></i> Shell Application
+                    <h5 class="mfe-shell-text">
+                      <i class="bi bi-hdd-network"></i> 🏠 Shell Application
                     </h5>
                     <p class="small mb-0">Host application that orchestrates all microfrontends</p>
-                    <span class="badge bg-info">Port 4200</span>
+                    <span class="badge mfe-shell">Port 4200</span>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="p-3 border rounded">
-                    <h5 class="text-success">
-                      <i class="bi bi-layout-text-window"></i> Header MFE
+                    <h5 class="mfe-header-text">
+                      <i class="bi bi-layout-text-window"></i> 📋 Header MFE
                     </h5>
                     <p class="small mb-0">Navigation bar with cart badge (Module Federation)</p>
-                    <span class="badge bg-success">Port 4201</span>
+                    <span class="badge mfe-header">Port 4201</span>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="p-3 border rounded">
-                    <h5 class="text-warning">
-                      <i class="bi bi-grid"></i> Products MFE
+                    <h5 class="mfe-products-text">
+                      <i class="bi bi-grid"></i> 📦 Products MFE
                     </h5>
                     <p class="small mb-0">Product catalog with add-to-cart (Module Federation)</p>
-                    <span class="badge bg-warning">Port 4202</span>
+                    <span class="badge mfe-products">Port 4202</span>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="p-3 border rounded">
-                    <h5 class="text-danger">
-                      <i class="bi bi-cart3"></i> Cart MFE
+                    <h5 class="mfe-cart-text">
+                      <i class="bi bi-cart3"></i> 🛒 Cart MFE
                     </h5>
                     <p class="small mb-0">Shopping cart management (Module Federation)</p>
-                    <span class="badge bg-danger">Port 4203</span>
+                    <span class="badge mfe-cart">Port 4203</span>
                   </div>
                 </div>
               </div>
@@ -91,12 +91,6 @@ import { CommonModule } from '@angular/common';
               </ul>
             </div>
           </div>
-
-          <div class="text-center">
-            <a href="/products" class="btn btn-primary btn-lg">
-              <i class="bi bi-grid"></i> Browse Products
-            </a>
-          </div>
         </div>
       </div>
     </div>
@@ -105,6 +99,34 @@ import { CommonModule } from '@angular/common';
     :host {
       display: block;
       padding: 20px 0;
+    }
+    .mfe-shell-text {
+      color: #0d6efd !important;
+    }
+    .mfe-header-text {
+      color: #6f42c1 !important;
+    }
+    .mfe-products-text {
+      color: #198754 !important;
+    }
+    .mfe-cart-text {
+      color: #fd7e14 !important;
+    }
+    .badge.mfe-shell {
+      background: #0d6efd !important;
+      color: white !important;
+    }
+    .badge.mfe-header {
+      background: #6f42c1 !important;
+      color: white !important;
+    }
+    .badge.mfe-products {
+      background: #198754 !important;
+      color: white !important;
+    }
+    .badge.mfe-cart {
+      background: #fd7e14 !important;
+      color: white !important;
     }
   `]
 })

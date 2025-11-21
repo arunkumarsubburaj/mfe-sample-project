@@ -34,9 +34,148 @@ router-outlet {
   bottom: 20px;
   right: 20px;
   z-index: 9999;
+  max-width: 600px;
 }
 
 .debug-panel .card {
-  min-width: 200px;
+  min-width: 400px;
+  max-width: 600px;
   font-size: 0.85rem;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.debug-content {
+  overflow: hidden;
+}
+
+.debug-logs {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  background: #1e1e1e;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px solid #333;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-time {
+  color: #666;
+  font-size: 0.7rem;
+  min-width: 80px;
+}
+
+.log-icon {
+  font-size: 1rem;
+}
+
+.log-from, .log-to {
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+/* MFE color coding - matching badges */
+.mfe-shell {
+  background: #0d6efd !important;
+  color: white !important;
+}
+
+.mfe-header {
+  background: #6f42c1 !important;
+  color: white !important;
+}
+
+.mfe-products {
+  background: #198754 !important;
+  color: white !important;
+}
+
+.mfe-cart {
+  background: #fd7e14 !important;
+  color: white !important;
+}
+
+/* Active MFE badges styling */
+.badge.mfe-shell,
+.badge.mfe-header,
+.badge.mfe-products,
+.badge.mfe-cart {
+  padding: 8px;
+  font-size: 12px;
+}
+
+/* MFE status indicators */
+.badge.mfe-inactive {
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+
+.badge.mfe-active {
+  opacity: 1;
+}
+
+.log-arrow {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.log-action {
+  color: #fff;
+  flex: 1;
+}
+
+.log-details {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.7rem;
+}
+
+.log-navigation {
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.log-message {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.log-cart {
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.log-mfe {
+  background: rgba(156, 39, 176, 0.1);
+}
+
+/* Scrollbar styling for debug logs */
+.debug-logs::-webkit-scrollbar {
+  width: 6px;
+}
+
+.debug-logs::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.debug-logs::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+.debug-logs::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }

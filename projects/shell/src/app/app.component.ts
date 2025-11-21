@@ -1,9 +1,10 @@
-import { Component, ViewChild, ViewContainerRef, AfterViewInit, Injector, createComponent, EnvironmentInjector, effect } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, AfterViewInit, Injector, createComponent, EnvironmentInjector, effect, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 import { InterAppCommunicationService } from 'shared-lib';
 import { CartService } from './services/cart.service';
+import { DebugLoggerService } from './services/debug-logger.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,9 @@ import { CartService } from './services/cart.service';
 })
 export class AppComponent implements AfterViewInit {
   title = 'E-Commerce Microfrontend Shell';
+  get debugLogs() { return this.debugLogger.getLogs(); }
+  get mfeStatuses() { return this.debugLogger.getMfeStatuses(); }
+  isDebugExpanded = signal(false);
   
   @ViewChild('headerContainer', { read: ViewContainerRef }) headerContainer!: ViewContainerRef;
 
@@ -21,13 +25,20 @@ export class AppComponent implements AfterViewInit {
     private injector: EnvironmentInjector,
     private commService: InterAppCommunicationService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    public debugLogger: DebugLoggerService
   ) {
     // Listen for add-to-cart messages from Products MFE
     effect(() => {
       const message = this.commService.getMessage('Products', 'add-to-cart')();
       if (message) {
-        console.log('[Shell] Received add-to-cart message:', message);
+        this.debugLogger.log({
+          type: 'message',
+          from: 'Products',
+          to: 'Shell',
+          action: 'Add to cart',
+          details: message.content.product.name
+        });
         this.cartService.addToCart(message.content.product, message.content.quantity);
         this.commService.clearMessage();
         
@@ -40,8 +51,14 @@ export class AppComponent implements AfterViewInit {
     effect(() => {
       const message = this.commService.getMessage('Cart', 'cart-operation')();
       if (message) {
-        console.log('[Shell] Received cart operation:', message);
         const { operation, productId, quantity } = message.content;
+        this.debugLogger.log({
+          type: 'message',
+          from: 'Cart',
+          to: 'Shell',
+          action: `Cart operation: ${operation}`,
+          details: { productId, quantity }
+        });
         
         switch (operation) {
           case 'remove':
@@ -64,7 +81,12 @@ export class AppComponent implements AfterViewInit {
     effect(() => {
       const message = this.commService.getMessage('Header', 'navigate')();
       if (message) {
-        console.log('[Shell] Received navigation request:', message.content.path);
+        this.debugLogger.log({
+          type: 'navigation',
+          from: 'Header',
+          to: 'Shell',
+          action: `Navigate to ${message.content.path}`
+        });
         this.router.navigate([message.content.path]);
         this.commService.clearMessage();
       }
@@ -77,11 +99,23 @@ export class AppComponent implements AfterViewInit {
     
     // Publish initial cart count
     setTimeout(() => this.publishCartUpdate(), 100);
+    
+    // Initial health check
+    this.debugLogger.checkMfeHealth();
+    
+    // Periodic health check every 10 seconds
+    setInterval(() => this.debugLogger.checkMfeHealth(), 10000);
   }
 
   private publishCartUpdate(): void {
     const count = this.cartService.cartCount();
-    console.log('[Shell] Publishing cart count:', count);
+    this.debugLogger.log({
+      type: 'message',
+      from: 'Shell',
+      to: 'Header',
+      action: 'Update cart count',
+      details: { count }
+    });
     
     this.commService.sendMessage({
       from: 'Shell',
@@ -113,9 +147,40 @@ export class AppComponent implements AfterViewInit {
       // Insert into container
       this.headerContainer.insert(componentRef.hostView);
       
-      console.log('[Shell] Header MFE loaded successfully');
+      this.debugLogger.log({
+        type: 'mfe',
+        from: 'Shell',
+        action: 'Header MFE loaded successfully'
+      });
+      this.debugLogger.updateMfeStatus('Header', true);
     } catch (error) {
       console.error('[Shell] Failed to load Header MFE:', error);
+      this.debugLogger.updateMfeStatus('Header', false);
     }
+  }
+
+  getLogIcon(type: string): string {
+    switch (type) {
+      case 'navigation': return '🧭';
+      case 'message': return '📨';
+      case 'cart': return '🛒';
+      case 'mfe': return '🔌';
+      default: return '📝';
+    }
+  }
+
+  formatDetails(details: any): string {
+    if (typeof details === 'string') return details;
+    if (typeof details === 'object') return JSON.stringify(details);
+    return String(details);
+  }
+
+  getMfeClass(mfeName: string): string {
+    const name = mfeName.toLowerCase();
+    if (name === 'shell') return 'mfe-shell';
+    if (name === 'header') return 'mfe-header';
+    if (name === 'products') return 'mfe-products';
+    if (name === 'cart') return 'mfe-cart';
+    return '';
   }
 }

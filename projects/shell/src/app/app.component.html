@@ -12,23 +12,59 @@
 
   <!-- Debug Panel -->
   <div class="debug-panel">
-    <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#debugCollapse">
-      <i class="bi bi-bug"></i> Debug
+    <button class="btn btn-sm btn-secondary" type="button" (click)="isDebugExpanded.set(!isDebugExpanded())">
+      <i class="bi bi-bug"></i> Debug Terminal
     </button>
-    <div class="collapse" id="debugCollapse">
-      <div class="card card-body mt-2 bg-dark text-light">
-        <h6>MFE Monitor</h6>
-        <small class="text-muted">Open console for messages</small>
-        <div class="mt-2">
-          <p class="mb-1 small"><strong>Active MFEs:</strong></p>
-          <ul class="list-unstyled small">
-            <li>🏠 Shell - :4200</li>
-            <li>📋 Header - :4201</li>
-            <li>📦 Products - :4202</li>
-            <li>🛒 Cart - :4203</li>
-          </ul>
+    @if (isDebugExpanded()) {
+      <div class="card card-body mt-2 bg-dark text-light debug-content">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0">
+            <i class="bi bi-terminal"></i> MFE Debug Terminal
+          </h6>
+          <button class="btn btn-sm btn-outline-light" (click)="debugLogger.clear()">
+            <i class="bi bi-trash"></i> Clear
+          </button>
+        </div>
+        
+        <div class="debug-logs">
+          @if (debugLogs.length === 0) {
+            <div class="text-muted text-center py-3">
+              <i class="bi bi-info-circle"></i> No messages yet. Interact with the app to see logs.
+            </div>
+          }
+          @for (log of debugLogs; track log.timestamp) {
+            <div class="log-entry" [class]="'log-' + log.type">
+              <span class="log-time">{{ log.timestamp | date:'HH:mm:ss.SSS' }}</span>
+              <span class="log-icon">{{ getLogIcon(log.type) }}</span>
+              <span class="log-from" [ngClass]="getMfeClass(log.from)">{{ log.from }}</span>
+              @if (log.to) {
+                <span class="log-arrow">→</span>
+                <span class="log-to" [ngClass]="getMfeClass(log.to)">{{ log.to }}</span>
+              }
+              <span class="log-action">{{ log.action }}</span>
+              @if (log.details) {
+                <span class="log-details">{{ formatDetails(log.details) }}</span>
+              }
+            </div>
+          }
+        </div>
+        
+        <div class="mt-3 pt-2 border-top border-secondary">
+          <p class="mb-1 small"><strong>MFE Status:</strong></p>
+          <div class="d-flex gap-2 flex-wrap small">
+            @for (mfe of mfeStatuses; track mfe.name) {
+              <span class="badge" [ngClass]="[getMfeClass(mfe.name), mfe.isActive ? 'mfe-active' : 'mfe-inactive']">
+                {{ mfe.icon }} {{ mfe.name }} :{{ mfe.port }}
+                @if (mfe.isActive) {
+                  <i class="bi bi-check-circle-fill ms-1"></i>
+                } @else {
+                  <i class="bi bi-x-circle-fill ms-1"></i>
+                }
+              </span>
+            }
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 </div>
